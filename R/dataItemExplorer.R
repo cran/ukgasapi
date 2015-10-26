@@ -9,22 +9,19 @@
 #' @param latestflag A character object with length of one to specify whether to extract the latest data. This can either be \code{Y} or \code{N}. Defaults to \code{Y}.
 #' @param applicableforflag A character object with length of one to specify whether dates specified are 'applicable for' or 'applicable on'. This can either be \code{Y} or \code{N} where \code{Y} indicates 'applicable for'. Defaults to \code{Y}.
 #' @param apiurl A character object which points to National Grid's SOAP API. Under most circumstances users do not have to change this. Defaults to 'http://marketinformation.natgrid.co.uk/MIPIws-public/public/publicwebservice.asmx'
-#' @param http_proxy A character object which points to your proxy server. This will assign the specified value to environment variable \code{http_proxy}. It will not assign anything if the value is \code{NULL}. Defaults to \code{NULL}.
 #' @return A dataframe object containing API response data.
 #' @examples
-#' library(ggplot2)
-#'
 #' # Specify the data item(s) to enquire from API
-#' dataitems <- c('Storage Injection, Actual','Storage Withdrawal, Actual')
+#' dataitems <- c('Storage Injection, Actual',
+#'                'Storage Withdrawal, Actual')
 #'
 #' # Initialise API (requires internet connection for this step)
-#' response <- dataItemExplorer(dataitems,fromdate = '2013-10-01', todate='2015-09-30')
-#'
-#' # Convert the results to appropiate types
-#' response$ApplicableFor <- as.Date(response$ApplicableFor)
-#' response$Value <- as.numeric(response$Value)
+#' response <- dataItemExplorer(dataitems,
+#'                              fromdate = '2013-10-01',
+#'                              todate='2015-09-30')
 #'
 #' # Visualise the results on a chart
+#' library(ggplot2)
 #' ggplot(response,aes(x=ApplicableFor,y=Value,colour=PublicationObjectName)) + geom_line()
 #' @author Timothy Wong, \email{timothy.wong@@hotmail.co.uk}
 #' @references
@@ -41,22 +38,10 @@ dataItemExplorer<- function(dataitems,
                             datetype='gasday',
                             latestflag='Y',
                             applicableforflag='Y',
-                            apiurl = 'http://marketinformation.natgrid.co.uk/MIPIws-public/public/publicwebservice.asmx',
-                            http_proxy = NULL) {
-
-  # Loads neccessary packages
-  requireNamespace('RCurl')
-  requireNamespace('XML')
-  requireNamespace('reshape')
-  requireNamespace('stringr')
+                            apiurl = 'http://marketinformation.natgrid.co.uk/MIPIws-public/public/publicwebservice.asmx') {
 
   # Creates SOAP XML request
-  soap.request <- paste0('<?xml version="1.0" encoding="utf-8"?><soap12:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope"><soap12:Body><GetPublicationDataWM xmlns="http://www.NationalGrid.com/MIPI/"><reqObject><LatestFlag>',latestflag,'</LatestFlag><ApplicableForFlag>',applicableforflag,'</ApplicableForFlag><ToDate>',todate,'</ToDate><FromDate>',fromdate,'</FromDate><DateType>',datetype,'</DateType><PublicationObjectNameList>',paste0('<string>',dataitems,'</string>', collapse = ''),'</PublicationObjectNameList></reqObject></GetPublicationDataWM></soap12:Body></soap12:Envelope>')
-
-  if(!is.null(http_proxy)){
-    # Configures proxy server
-    Sys.setenv(http_proxy=http_proxy)
-  }
+  soap.request <- base::paste0('<?xml version="1.0" encoding="utf-8"?><soap12:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope"><soap12:Body><GetPublicationDataWM xmlns="http://www.NationalGrid.com/MIPI/"><reqObject><LatestFlag>',latestflag,'</LatestFlag><ApplicableForFlag>',applicableforflag,'</ApplicableForFlag><ToDate>',todate,'</ToDate><FromDate>',fromdate,'</FromDate><DateType>',datetype,'</DateType><PublicationObjectNameList>',paste0('<string>',dataitems,'</string>', collapse = ''),'</PublicationObjectNameList></reqObject></GetPublicationDataWM></soap12:Body></soap12:Envelope>')
 
   # Initialises a text gatherer
   h <- RCurl::basicTextGatherer()
@@ -80,15 +65,28 @@ dataItemExplorer<- function(dataitems,
     # Porcessing data frames
     rows <- objects[[i]][['PublicationObjectData']]
 
-    list.of.rows <- data.frame()
+    list.of.rows <- base::data.frame()
 
     for(r in 1:length(rows)){
       # Processing individual row
-      list.of.rows <- rbind(list.of.rows,as.data.frame(rows[r][[1]],stringsAsFactors = FALSE))
+      list.of.rows <- base::rbind(list.of.rows,as.data.frame(rows[r][[1]],stringsAsFactors = FALSE))
     }
     list.of.rows$PublicationObjectName <- objects[[i]][[1]]
 
-    list.of.data.frames <- rbind(list.of.data.frames, as.data.frame(list.of.rows))
+    list.of.data.frames <- base::rbind(list.of.data.frames, as.data.frame(list.of.rows))
   }
-  return (list.of.data.frames)
+
+  # Convert all columns to appropiate types before returning data frame
+  result <- base::within(data = list.of.data.frames,expr = {
+    ApplicableAt <- strptime(ApplicableAt,'%Y-%m-%dT%H:%M:%SZ','UTC')
+    ApplicableFor <- strptime(ApplicableFor,'%Y-%m-%dT%H:%M:%SZ','UTC')
+    Value <- as.numeric(Value)
+    GeneratedTimeStamp <- strptime(GeneratedTimeStamp,'%Y-%m-%dT%H:%M:%SZ','UTC')
+    QualityIndicator <- factor(QualityIndicator)
+    Substituted <- factor(QualityIndicator)
+    CreatedDate <- strptime(CreatedDate,'%Y-%m-%dT%H:%M:%SZ','UTC')
+    PublicationObjectName <- as.factor(PublicationObjectName)
+  })
+
+  return (result)
 }
