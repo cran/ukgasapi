@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Timothy Wong" />
+
+<meta name="date" content="2018-07-18" />
+
+<title>UK Gas Market Information</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+
+
+<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">UK Gas Market Information</h1>
+<h4 class="author"><em>Timothy Wong</em></h4>
+<h4 class="date"><em>2018-07-18</em></h4>
+
+
+
+<p>The National Grid publishes live market information through Market Information Provision Initiative (MIPI) API. It hosts a large volume of data (over 13,500 data items)<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> and is used extensively on a daily basis.</p>
+<div id="calling-the-api" class="section level1">
+<h1>Calling the API</h1>
+<p>The function <code>dataItemExplorer</code> calls the MIPI API and returns data from the <a href="http://mip-prod-web.azurewebsites.net/DataItemExplorer">Data Item Explorer</a>. The first argument <code>dataitems</code> is a character vector of data items where multiple values are accepted. It must match with the data items provided on the Data Item Explorer. This function also requires <code>fromdate</code> and <code>todate</code> which specify the date range to return data from. The return type is a <code>data.frame</code> object.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">response &lt;-<span class="st"> </span><span class="kw">dataItemExplorer</span>(<span class="dt">dataitems =</span> <span class="kw">c</span>(<span class="st">&quot;Storage Injection, Actual&quot;</span>,
+                                           <span class="st">&quot;Storage Withdrawal, Actual&quot;</span>),
+                             <span class="dt">fromdate =</span> <span class="st">&quot;2017-01-01&quot;</span>,
+                             <span class="dt">todate =</span> <span class="st">&quot;2018-06-30&quot;</span>)
+<span class="kw">head</span>(response, <span class="dv">10</span>)</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">ApplicableAt</th>
+<th align="left">ApplicableFor</th>
+<th align="right">Value</th>
+<th align="left">GeneratedTimeStamp</th>
+<th align="left">QualityIndicator</th>
+<th align="left">Substituted</th>
+<th align="left">CreatedDate</th>
+<th align="left">PublicationObjectName</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">2017-02-10 15:00:00</td>
+<td align="left">2017-01-01</td>
+<td align="right">654339382</td>
+<td align="left">2017-02-10 15:01:38</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">2017-02-10 15:01:38</td>
+<td align="left">Storage Injection, Actual</td>
+</tr>
+<tr class="even">
+<td align="left">2017-02-10 15:00:00</td>
+<td align="left">2017-01-02</td>
+<td align="right">191923757</td>
+<td align="left">2017-02-10 15:01:38</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">2017-02-10 15:01:39</td>
+<td align="left">Storage Injection, Actual</td>
+</tr>
+<tr class="odd">
+<td align="left">2017-02-10 15:00:00</td>
+<td align="left">2017-01-03</td>
+<td align="right">65808124</td>
+<td align="left">2017-02-10 15:01:38</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">2017-02-10 15:01:38</td>
+<td align="left">Storage Injection, Actual</td>
+</tr>
+<tr class="even">
+<td align="left">2017-02-10 15:00:00</td>
+<td align="left">2017-01-04</td>
+<td align="right">2743671</td>
+<td align="left">2017-02-10 15:01:38</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">2017-02-10 15:01:39</td>
+<td align="left">Storage Injection, Actual</td>
+</tr>
+<tr class="odd">
+<td align="left">2017-02-10 15:00:00</td>
+<td align="left">2017-01-05</td>
+<td align="right">72190668</td>
+<td align="left">2017-02-10 15:01:38</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">2017-02-10 15:01:40</td>
+<td align="left">Storage Injection, Actual</td>
+</tr>
+<tr class="even">
+<td align="left">2017-02-10 15:00:00</td>
+<td align="left">2017-01-06</td>
+<td align="right">2582168</td>
+<td align="left">2017-02-10 15:01:38</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">2017-02-10 15:01:46</td>
+<td align="left">Storage Injection, Actual</td>
+</tr>
+<tr class="odd">
+<td align="left">2017-02-10 15:00:00</td>
+<td align="left">2017-01-07</td>
+<td align="right">202786018</td>
+<td align="left">2017-02-10 15:01:38</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">2017-02-10 15:01:40</td>
+<td align="left">Storage Injection, Actual</td>
+</tr>
+<tr class="even">
+<td align="left">2017-02-10 15:00:00</td>
+<td align="left">2017-01-08</td>
+<td align="right">354960293</td>
+<td align="left">2017-02-10 15:01:38</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">2017-02-10 15:01:45</td>
+<td align="left">Storage Injection, Actual</td>
+</tr>
+<tr class="odd">
+<td align="left">2017-02-10 15:00:00</td>
+<td align="left">2017-01-09</td>
+<td align="right">247556567</td>
+<td align="left">2017-02-10 15:01:38</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">2017-02-10 15:01:39</td>
+<td align="left">Storage Injection, Actual</td>
+</tr>
+<tr class="even">
+<td align="left">2017-02-10 15:00:00</td>
+<td align="left">2017-01-10</td>
+<td align="right">121739669</td>
+<td align="left">2017-02-10 15:01:38</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">2017-02-10 15:01:45</td>
+<td align="left">Storage Injection, Actual</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="visualising-the-api-response" class="section level1">
+<h1>Visualising the API response</h1>
+<p>Since the return type is a <code>data.frame</code> object, users can use standard plotting packages such as <code>ggplot2</code> to visualise the response.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
+<span class="kw">qplot</span>(<span class="dt">x =</span> ApplicableFor,
+      <span class="dt">y =</span> Value,
+      <span class="dt">data =</span> response,
+      <span class="dt">colour =</span> PublicationObjectName,
+      <span class="dt">geom =</span> <span class="st">&quot;line&quot;</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>)</code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>According to the <a href="https://www.nationalgrid.com/sites/default/files/documents/42797-MIPI%20Update.pdf">National Grid</a><a href="#fnref1">↩</a></p></li>
+</ol>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

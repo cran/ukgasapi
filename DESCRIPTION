@@ -1,6 +1,6 @@
 Package: ukgasapi
 Title: API for UK Gas Market Information
-Version: 0.13
+Version: 0.14
 Authors@R: person("Timothy", "Wong", email = "timothy.wong@hotmail.co.uk", role = c("aut", "cre"))
 Author: Timothy Wong [aut, cre]
 Maintainer: Timothy Wong <timothy.wong@hotmail.co.uk>
@@ -10,8 +10,10 @@ BugReports: https://github.com/timothy-wong/ukgasapi/issues
 License: GPL-2
 Imports: RCurl,XML
 LazyData: true
-Suggests: ggplot2
+Suggests: ggplot2, knitr, rmarkdown
+RoxygenNote: 6.0.1
+VignetteBuilder: knitr
 NeedsCompilation: no
-Packaged: 2015-10-25 22:14:32 UTC; timot
+Packaged: 2018-07-18 04:35:36 UTC; timot
 Repository: CRAN
-Date/Publication: 2015-10-26 00:51:07
+Date/Publication: 2018-07-18 06:30:03 UTC
