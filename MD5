@@ -1,9 +1,9 @@
-5417047849bf18d3d77f7eb10468dfb5 *DESCRIPTION
+742bfa61dc3c677392f11f5ad2f4952f *DESCRIPTION
 d1eb0d244b4fab7fb12040f8f6cdeb88 *NAMESPACE
-3d1b998864748be774fdf884c7e16b83 *R/dataItemExplorer.R
-f70d1caa1282506b7e1f54b982d449f9 *build/vignette.rds
-9441b9eaa5fa22afc3f73bde98a00ba0 *inst/doc/vignette.R
-f52c9f656be997f844e60b5deec28bcb *inst/doc/vignette.Rmd
-407697e1778bf9b2221cf0211e28a795 *inst/doc/vignette.html
-e8ba97b24ac7f67fa02dabe0d09bb9a5 *man/dataItemExplorer.Rd
-f52c9f656be997f844e60b5deec28bcb *vignettes/vignette.Rmd
+f9694ab8b88f3ce250d6f7707d69b746 *R/dataItemExplorer.R
+98f4a298192c09c516e64f2d290f77bc *build/vignette.rds
+3afbc5e49886c7a8f29a21ba85a92074 *inst/doc/vignette.R
+d3793a72332266a870e4378a9ef7e675 *inst/doc/vignette.Rmd
+573af941eefc6be417fb5de8b9f21b5b *inst/doc/vignette.html
+b4fa645a2cbc67759fa4f0fe5427e960 *man/dataItemExplorer.Rd
+d3793a72332266a870e4378a9ef7e675 *vignettes/vignette.Rmd
