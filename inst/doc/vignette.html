@@ -13,7 +13,7 @@
 
 <meta name="author" content="Timothy Wong" />
 
-<meta name="date" content="2019-11-14" />
+<meta name="date" content="2020-09-01" />
 
 <title>UK Gas Market Information</title>
 
@@ -304,14 +304,14 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 <h1 class="title toc-ignore">UK Gas Market Information</h1>
 <h4 class="author">Timothy Wong</h4>
-<h4 class="date">2019-11-14</h4>
+<h4 class="date">2020-09-01</h4>
 
 
 
 <p>The National Grid publishes live market information through Market Information Provision Initiative (MIPI) API. It hosts a large volume of data (over 13,500 data items)<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> and is used extensively on a daily basis.</p>
 <div id="calling-the-api" class="section level1">
 <h1>Calling the API</h1>
-<p>The function <code>dataItemExplorer</code> calls the MIPI API and returns data from the <a href="https://mip-prod-web.azurewebsites.net/DataItemExplorer">Data Item Explorer</a>. The first argument <code>dataitems</code> is a character vector of data items where multiple values are accepted. It must match with the data items provided on the Data Item Explorer. This function also requires <code>fromdate</code> and <code>todate</code> which specify the date range to return data from. The return type is a <code>data.frame</code> object.</p>
+<p>The function <code>dataItemExplorer</code> calls the MIPI API and returns data from the <a href="http://mip-prd-web.azurewebsites.net/DataItemExplorer">Data Item Explorer</a>. The first argument <code>dataitems</code> is a character vector of data items where multiple values are accepted. It must match with the data items provided on the Data Item Explorer. This function also requires <code>fromdate</code> and <code>todate</code> which specify the date range to return data from. The return type is a <code>data.frame</code> object.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1">response &lt;-<span class="st"> </span><span class="kw">dataItemExplorer</span>(<span class="dt">dataitems =</span> <span class="kw">c</span>(<span class="st">&quot;Storage Injection, Actual&quot;</span>,</a>
 <a class="sourceLine" id="cb1-2" title="2">                                           <span class="st">&quot;Storage Withdrawal, Actual&quot;</span>),</a>
 <a class="sourceLine" id="cb1-3" title="3">                             <span class="dt">fromdate =</span> <span class="st">&quot;2017-01-01&quot;</span>,</a>
