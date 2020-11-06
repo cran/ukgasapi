@@ -4,8 +4,13 @@
 \alias{bmrsIndoItsdo}
 \title{BMRS Initial Demand Outturn API Service}
 \usage{
-bmrsIndoItsdo(fromdate, todate, apikey, batchsize = 60,
-  apiurl = "https://api.bmreports.com/BMRS/INDOITSDO/v1")
+bmrsIndoItsdo(
+  fromdate,
+  todate,
+  apikey,
+  batchsize = 60,
+  apiurl = "https://api.bmreports.com/BMRS/INDOITSDO/v1"
+)
 }
 \arguments{
 \item{fromdate}{A character object specifying the start date. Date is inclusive.}

@@ -4,10 +4,17 @@
 \alias{dataItemExplorer}
 \title{Data Item Explorer API}
 \usage{
-dataItemExplorer(dataitems, fromdate, todate, datetype = "gasday",
-  latestflag = "Y", applicableforflag = "Y", batchsize = -1,
+dataItemExplorer(
+  dataitems,
+  fromdate,
+  todate,
+  datetype = "gasday",
+  latestflag = "Y",
+  applicableforflag = "Y",
+  batchsize = -1,
   apiurl = paste0("https://marketinformation.natgrid.co.uk/",
-  "MIPIws-public/public/publicwebservice.asmx"))
+    "MIPIws-public/public/publicwebservice.asmx")
+)
 }
 \arguments{
 \item{dataitems}{A vector of characters containing data items to enquire via API.}
@@ -36,24 +43,26 @@ This function connects to the UK National Grid's API for Data Item Explorer, whi
 The function submits a request to the API using XML over SOAP protocol. The response is in XML format which function will parse internally and returns a R dataframe object.
 }
 \examples{
+\dontrun{
 # Specify the data item(s) to enquire from API
 dataitems <- c("Storage Injection, Actual",
                "Storage Withdrawal, Actual")
 
 # Invoke the API (requires internet connection at this step)
 response <- dataItemExplorer(dataitems,
-                             fromdate = "2015-09-01",
-                             todate="2015-09-30")
+                             fromdate = "2020-01-01",
+                             todate="2020-01-31")
 
 # Visualise the results on a chart
 library(ggplot2)
 ggplot(response,aes(x=ApplicableFor,y=Value,colour=PublicationObjectName)) +
  geom_line()
 }
+}
 \references{
 \itemize{
 \item Graphical User Interface for Data Item Explorer\cr
-\url{https://mip-prod-web.azurewebsites.net/DataItemExplorer}
+\url{https://mip-prd-web.azurewebsites.net/DataItemExplorer}
 \item API specification\cr
 \url{https://marketinformation.natgrid.co.uk/MIPIws-public/public/publicwebservice.asmx?op=GetPublicationDataWM}
 }

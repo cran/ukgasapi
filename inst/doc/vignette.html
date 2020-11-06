@@ -1,29 +1,44 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 <meta name="author" content="Timothy Wong" />
 
-<meta name="date" content="2020-09-01" />
+<meta name="date" content="2020-10-26" />
 
 <title>UK Gas Market Information</title>
 
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
 
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 div.sourceCode { margin: 1em 0; }
@@ -33,14 +48,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -49,9 +66,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -118,9 +135,6 @@ padding-right: 2em;
 font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 font-size: 14px;
 line-height: 1.35;
-}
-#header {
-text-align: center;
 }
 #TOC {
 clear: both;
@@ -289,7 +303,8 @@ code > span.st { color: #d14; }
 code > span.co { color: #888888; font-style: italic; } 
 code > span.ot { color: #007020; } 
 code > span.al { color: #ff0000; font-weight: bold; } 
-code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
 </style>
 
 
@@ -304,161 +319,44 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 <h1 class="title toc-ignore">UK Gas Market Information</h1>
 <h4 class="author">Timothy Wong</h4>
-<h4 class="date">2020-09-01</h4>
+<h4 class="date">2020-10-26</h4>
 
 
 
 <p>The National Grid publishes live market information through Market Information Provision Initiative (MIPI) API. It hosts a large volume of data (over 13,500 data items)<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> and is used extensively on a daily basis.</p>
 <div id="calling-the-api" class="section level1">
 <h1>Calling the API</h1>
-<p>The function <code>dataItemExplorer</code> calls the MIPI API and returns data from the <a href="http://mip-prd-web.azurewebsites.net/DataItemExplorer">Data Item Explorer</a>. The first argument <code>dataitems</code> is a character vector of data items where multiple values are accepted. It must match with the data items provided on the Data Item Explorer. This function also requires <code>fromdate</code> and <code>todate</code> which specify the date range to return data from. The return type is a <code>data.frame</code> object.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1">response &lt;-<span class="st"> </span><span class="kw">dataItemExplorer</span>(<span class="dt">dataitems =</span> <span class="kw">c</span>(<span class="st">&quot;Storage Injection, Actual&quot;</span>,</a>
-<a class="sourceLine" id="cb1-2" title="2">                                           <span class="st">&quot;Storage Withdrawal, Actual&quot;</span>),</a>
-<a class="sourceLine" id="cb1-3" title="3">                             <span class="dt">fromdate =</span> <span class="st">&quot;2017-01-01&quot;</span>,</a>
-<a class="sourceLine" id="cb1-4" title="4">                             <span class="dt">todate =</span> <span class="st">&quot;2017-12-31&quot;</span>)</a>
-<a class="sourceLine" id="cb1-5" title="5"><span class="kw">head</span>(response, <span class="dv">10</span>)</a></code></pre></div>
-<table>
-<thead>
-<tr class="header">
-<th align="left">ApplicableAt</th>
-<th align="left">ApplicableFor</th>
-<th align="right">Value</th>
-<th align="left">GeneratedTimeStamp</th>
-<th align="left">QualityIndicator</th>
-<th align="left">Substituted</th>
-<th align="left">CreatedDate</th>
-<th align="left">PublicationObjectName</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">2017-02-10 15:00:00</td>
-<td align="left">2017-01-01</td>
-<td align="right">654339382</td>
-<td align="left">2017-02-10 15:01:38</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left">2017-02-10 15:01:38</td>
-<td align="left">Storage Injection, Actual</td>
-</tr>
-<tr class="even">
-<td align="left">2017-02-10 15:00:00</td>
-<td align="left">2017-01-02</td>
-<td align="right">191923757</td>
-<td align="left">2017-02-10 15:01:38</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left">2017-02-10 15:01:39</td>
-<td align="left">Storage Injection, Actual</td>
-</tr>
-<tr class="odd">
-<td align="left">2017-02-10 15:00:00</td>
-<td align="left">2017-01-03</td>
-<td align="right">65808124</td>
-<td align="left">2017-02-10 15:01:38</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left">2017-02-10 15:01:38</td>
-<td align="left">Storage Injection, Actual</td>
-</tr>
-<tr class="even">
-<td align="left">2017-02-10 15:00:00</td>
-<td align="left">2017-01-04</td>
-<td align="right">2743671</td>
-<td align="left">2017-02-10 15:01:38</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left">2017-02-10 15:01:39</td>
-<td align="left">Storage Injection, Actual</td>
-</tr>
-<tr class="odd">
-<td align="left">2017-02-10 15:00:00</td>
-<td align="left">2017-01-05</td>
-<td align="right">72190668</td>
-<td align="left">2017-02-10 15:01:38</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left">2017-02-10 15:01:40</td>
-<td align="left">Storage Injection, Actual</td>
-</tr>
-<tr class="even">
-<td align="left">2017-02-10 15:00:00</td>
-<td align="left">2017-01-06</td>
-<td align="right">2582168</td>
-<td align="left">2017-02-10 15:01:38</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left">2017-02-10 15:01:46</td>
-<td align="left">Storage Injection, Actual</td>
-</tr>
-<tr class="odd">
-<td align="left">2017-02-10 15:00:00</td>
-<td align="left">2017-01-07</td>
-<td align="right">202786018</td>
-<td align="left">2017-02-10 15:01:38</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left">2017-02-10 15:01:40</td>
-<td align="left">Storage Injection, Actual</td>
-</tr>
-<tr class="even">
-<td align="left">2017-02-10 15:00:00</td>
-<td align="left">2017-01-08</td>
-<td align="right">354960293</td>
-<td align="left">2017-02-10 15:01:38</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left">2017-02-10 15:01:45</td>
-<td align="left">Storage Injection, Actual</td>
-</tr>
-<tr class="odd">
-<td align="left">2017-02-10 15:00:00</td>
-<td align="left">2017-01-09</td>
-<td align="right">247556567</td>
-<td align="left">2017-02-10 15:01:38</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left">2017-02-10 15:01:39</td>
-<td align="left">Storage Injection, Actual</td>
-</tr>
-<tr class="even">
-<td align="left">2017-02-10 15:00:00</td>
-<td align="left">2017-01-10</td>
-<td align="right">121739669</td>
-<td align="left">2017-02-10 15:01:38</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left">2017-02-10 15:01:45</td>
-<td align="left">Storage Injection, Actual</td>
-</tr>
-</tbody>
-</table>
+<p>The function <code>dataItemExplorer</code> calls the MIPI API and returns data from the <a href="https://mip-prd-web.azurewebsites.net/DataItemExplorer">Data Item Explorer</a>. The first argument <code>dataitems</code> is a character vector of data items where multiple values are accepted. It must match with the data items provided on the Data Item Explorer. This function also requires <code>fromdate</code> and <code>todate</code> which specify the date range to return data from. The return type is a <code>data.frame</code> object.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>response &lt;-<span class="st"> </span><span class="kw">dataItemExplorer</span>(<span class="dt">dataitems =</span> <span class="kw">c</span>(<span class="st">&quot;Storage Injection, Actual&quot;</span>,</span>
+<span id="cb1-2"><a href="#cb1-2"></a>                                           <span class="st">&quot;Storage Withdrawal, Actual&quot;</span>),</span>
+<span id="cb1-3"><a href="#cb1-3"></a>                             <span class="dt">fromdate =</span> <span class="st">&quot;2020-01-01&quot;</span>,</span>
+<span id="cb1-4"><a href="#cb1-4"></a>                             <span class="dt">todate =</span> <span class="st">&quot;2020-06-30&quot;</span>)</span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="kw">head</span>(response, <span class="dv">10</span>)</span></code></pre></div>
 </div>
 <div id="using-batch-mode" class="section level1">
 <h1>Using batch mode</h1>
 <p>The National Grid API has certain limit of the size of the query. As a result, we need to implement batch mode if the query it too large. The <code>batchsize</code> argument can be configured to limit the size of each API call. It will loop through all dates iteratively and return all results.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">response &lt;-<span class="st"> </span><span class="kw">dataItemExplorer</span>(<span class="dt">dataitems =</span> <span class="kw">c</span>(<span class="st">&quot;Storage Injection, Actual&quot;</span>,</a>
-<a class="sourceLine" id="cb2-2" title="2">                                           <span class="st">&quot;Storage Withdrawal, Actual&quot;</span>),</a>
-<a class="sourceLine" id="cb2-3" title="3">                             <span class="dt">fromdate =</span> <span class="st">&quot;2017-01-01&quot;</span>,</a>
-<a class="sourceLine" id="cb2-4" title="4">                             <span class="dt">todate =</span> <span class="st">&quot;2017-12-31&quot;</span>,</a>
-<a class="sourceLine" id="cb2-5" title="5">                             <span class="dt">batchsize =</span> <span class="dv">20</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>response &lt;-<span class="st"> </span><span class="kw">dataItemExplorer</span>(<span class="dt">dataitems =</span> <span class="kw">c</span>(<span class="st">&quot;Storage Injection, Actual&quot;</span>,</span>
+<span id="cb2-2"><a href="#cb2-2"></a>                                           <span class="st">&quot;Storage Withdrawal, Actual&quot;</span>),</span>
+<span id="cb2-3"><a href="#cb2-3"></a>                             <span class="dt">fromdate =</span> <span class="st">&quot;2020-01-01&quot;</span>,</span>
+<span id="cb2-4"><a href="#cb2-4"></a>                             <span class="dt">todate =</span> <span class="st">&quot;2020-06-30&quot;</span>,</span>
+<span id="cb2-5"><a href="#cb2-5"></a>                             <span class="dt">batchsize =</span> <span class="dv">20</span>)</span></code></pre></div>
 </div>
 <div id="visualising-the-api-response" class="section level1">
 <h1>Visualising the API response</h1>
 <p>Since the return type is a <code>data.frame</code> object, users can use standard plotting packages such as <code>ggplot2</code> to visualise the response.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw">library</span>(ggplot2)</a>
-<a class="sourceLine" id="cb3-2" title="2"><span class="kw">qplot</span>(<span class="dt">x =</span> ApplicableFor,</a>
-<a class="sourceLine" id="cb3-3" title="3">      <span class="dt">y =</span> Value,</a>
-<a class="sourceLine" id="cb3-4" title="4">      <span class="dt">data =</span> response,</a>
-<a class="sourceLine" id="cb3-5" title="5">      <span class="dt">colour =</span> PublicationObjectName,</a>
-<a class="sourceLine" id="cb3-6" title="6">      <span class="dt">geom =</span> <span class="st">&quot;line&quot;</span>) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb3-7" title="7"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>)</a></code></pre></div>
-<p><img src="data:image/png;base64,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" /><!-- --></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">library</span>(ggplot2)</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="kw">qplot</span>(<span class="dt">x =</span> ApplicableFor,</span>
+<span id="cb3-3"><a href="#cb3-3"></a>      <span class="dt">y =</span> Value,</span>
+<span id="cb3-4"><a href="#cb3-4"></a>      <span class="dt">data =</span> response,</span>
+<span id="cb3-5"><a href="#cb3-5"></a>      <span class="dt">colour =</span> PublicationObjectName,</span>
+<span id="cb3-6"><a href="#cb3-6"></a>      <span class="dt">geom =</span> <span class="st">&quot;line&quot;</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb3-7"><a href="#cb3-7"></a><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>)</span></code></pre></div>
 </div>
 <div class="footnotes">
 <hr />
 <ol>
-<li id="fn1"><p>According to the <a href="https://www.nationalgrid.com/sites/default/files/documents/42797-MIPI%20Update.pdf">National Grid</a><a href="#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn1"><p>According to the <a href="https://www.nationalgrid.com/sites/default/files/documents/42797-MIPI%20Update.pdf">National Grid</a><a href="#fnref1" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
 
